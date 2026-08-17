@@ -1,0 +1,34 @@
+name: Daily GitHub Contribution
+
+on:
+  schedule:
+    # Every day at 11:30 PM IST
+    - cron: "0 18 * * *"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "Meet244323"
+          git config user.email "meetkadia28@gmail.com"
+
+      - name: Create daily activity
+        run: |
+          echo "Daily GitHub activity: $(date -u '+%Y-%m-%d')" >> activity.log
+
+      - name: Commit and push
+        run: |
+          git add activity.log
+          git commit -m "chore: daily activity $(date -u '+%Y-%m-%d')" || exit 0
+          git push
